@@ -3,3 +3,14 @@ spring:
     name: api-gateway
   config:
     import: optional:configserver:http://localhost:8888
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    urls:
+      - name: User Service
+        url: /user-service/v3/api-docs
+      - name: Product Service
+        url: /product-service/v3/api-docs
+      - name: Order Service
+        url: /order-service/v3/api-docs

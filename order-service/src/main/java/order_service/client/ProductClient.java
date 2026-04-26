@@ -9,4 +9,7 @@ public interface ProductClient {
 
     @GetMapping("/products/{id}")
     Object getProductById(@PathVariable("id") Long id);
+
+    @GetMapping("/products/{productId}/validate-with-user/{userId}")
+    Boolean validateProductAndUser(@PathVariable("productId") Long productId, @PathVariable("userId") Long userId);
 }

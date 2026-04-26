@@ -1,9 +1,10 @@
 package product_service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import product_service.entity.Product;
-import product_service.repository.ProductRepository;
+import product_service.service.ProductService;
 
 import java.util.List;
 
@@ -12,25 +13,35 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @GetMapping
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productRepository.findById(id).orElse(null);
+        return productService.getProductById(id);
     }
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {
-        return productRepository.save(product);
+        return productService.createProduct(product);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+        productService.deleteProduct(id);
+    }
+
+    @GetMapping("/{productId}/validate-with-user/{userId}")
+    public ResponseEntity<?> validateProductAndUser(@PathVariable Long productId, @PathVariable Long userId) {
+        try {
+            boolean isValid = productService.validateProductAndUser(productId, userId);
+            return ResponseEntity.ok(isValid);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 }
